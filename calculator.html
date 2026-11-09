@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marvellous Calc - Everything Calculator</title>
+<img src="me.jpg" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid #ff9f0a;">
+<h1>MARVELLOUS <span>CALC</span></h1>
+<p>David Marvellous Onyinsi</p>
+<meta name="description" content="Marvellous Calc - Calculator, Scientific, Converter, Finance, Health, Age, Date, Everything in One">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+body{background:#0b0b0f;color:white;padding:14px;min-height:100vh}
+.top{text-align:center;margin-bottom:12px}
+.top h1{font-size:26px;letter-spacing:1px}.top h1 span{color:#ff9f0a}
+.top p{font-size:12px;opacity:.6}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;justify-content:center;flex-wrap:wrap}
+.tab{padding:9px 14px;border-radius:20px;background:#222;border:1px solid #333;cursor:pointer;font-size:13px;white-space:nowrap}
+.tab.active{background:#ff9f0a;color:#000;font-weight:700;border-color:#ff9f0a}
+.card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:20px;padding:16px;max-width:460px;margin:0 auto}
+.hidden{display:none}
+.screen{background:#e8f5e9;color:#111;border-radius:14px;padding:12px;text-align:right;min-height:80px;margin-bottom:12px}
+#history{font-size:12px;color:#666;min-height:16px;word-break:break-all}
+#result{font-size:30px;font-weight:800;word-break:break-all}
+.row{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:6px}
+button{height:46px;border:none;border-radius:12px;background:#2d2d2d;color:white;cursor:pointer;font-size:14px}
+button:active{transform:scale(.94)}
+.num{background:#3a3a3a;font-weight:700;font-size:17px}
+.op{background:#ff9f0a;font-weight:800}
+.sci{background:#222;color:#ffb84d;font-size:12px}
+.clear{background:#ff3b30;font-weight:700}.equal{background:#ff9f0a;font-weight:800;grid-column:span 2}
+label{font-size:12px;opacity:.7;display:block;margin:10px 0 5px}
+input,select{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#222;color:white;font-size:15px;outline:none}
+select{appearance:none}
+.btn{width:100%;padding:13px;background:#ff9f0a;color:#000;font-weight:800;border-radius:12px;margin-top:12px;font-size:15px}
+.out{background:#222;border-radius:12px;padding:12px;margin-top:12px;font-size:14px;line-height:1.7;white-space:pre-wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.small{font-size:11px;opacity:.6;text-align:center;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="top"><h1>MARVELLOUS <span>CALC</span></h1><p>EVERYTHING IN THE WORLD • ONE APP</p></div>
+
+<div class="tabs" id="tabs">
+<button class="tab active" data-t="calc">🧮 Calculator</button>
+<button class="tab" data-t="sci">🔬 Scientific</button>
+<button class="tab" data-t="conv">📏 Converter</button>
+<button class="tab" data-t="money">💰 Money</button>
+<button class="tab" data-t="health">❤️ Health</button>
+<button class="tab" data-t="date">📅 Age & Date</button>
+<button class="tab" data-t="math">📐 Maths Tools</button>
+</div>
+
+<!-- CALC -->
+<div class="card" id="page-calc">
+<div class="screen"><div id="history"></div><div id="result">0</div></div>
+<div class="row">
+<button class="sci" data-val="("> (</button><button class="sci" data-val=")">)</button><button class="sci" data-val="%">%</button><button id="back">⌫</button><button class="clear" id="clear">AC</button>
+</div>
+<div class="row"><button class="num" data-val="7">7</button><button class="num" data-val="8">8</button><button class="num" data-val="9">9</button><button class="op" data-val="/">÷</button><button class="op" data-val="*">×</button></div>
+<div class="row"><button class="num" data-val="4">4</button><button class="num" data-val="5">5</button><button class="num" data-val="6">6</button><button class="op" data-val="-">−</button><button class="op" data-val="+">+</button></div>
+<div class="row"><button class="num" data-val="1">1</button><button class="num" data-val="2">2</button><button class="num" data-val="3">3</button><button class="num" data-val=".">.</button><button class="num" data-val="0">0</button></div>
+<div class="row"><button class="num" data-val="00">00</button><button class="num" data-val="000">000</button><button class="equal" id="equals">=</button></div>
+<div class="small">History is saved below • Tap = to calculate</div><div id="calcHistory" class="out">No history yet</div>
+</div>
+
+<!-- SCI -->
+<div class="card hidden" id="page-sci">
+<div class="screen"><div id="history2"></div><div id="result2">0</div></div>
+<div class="row">
+<button class="sci" data-s="sin(">sin</button><button class="sci" data-s="cos(">cos</button><button class="sci" data-s="tan(">tan</button><button class="sci" data-s="asin(">sin⁻¹</button><button class="sci" data-s="acos(">cos⁻¹</button>
+</div>
+<div class="row">
+<button class="sci" data-s="log(">log</button><button class="sci" data-s="ln(">ln</button><button class="sci" data-s="sqrt(">√</button><button class="sci" data-s="cbrt(">∛</button><button class="sci" data-s="**">xʸ</button>
+</div>
+<div class="row">
+<button class="sci" data-s="pi">π</button><button class="sci" data-s="e">e</button><button class="sci" data-s="!">x!</button><button class="sci" data-s="abs("> |x|</button><button class="sci" data-s="10**">10ˣ</button>
+</div>
+<div class="row"><button class="num" data-s="7">7</button><button class="num" data-s="8">8</button><button class="num" data-s="9">9</button><button class="op" data-s="/">÷</button><button class="op" data-s="*">×</button></div>
+<div class="row"><button class="num" data-s="4">4</button><button class="num" data-s="5">5</button><button class="num" data-s="6">6</button><button class="op" data-s="-">−</button><button class="op" data-s="+">+</button></div>
+<div class="row"><button class="num" data-s="1">1</button><button class="num" data-s="2">2</button><button class="num" data-s="3">3</button><button class="num" data-s=".">.</button><button class="num" data-s="0">0</button></div>
+<div class="row"><button class="num" data-s="("> (</button><button class="num" data-s=")">)</button><button class="equal" id="equals2">=</button></div>
+<div class="row"><button id="clear2" class="clear">AC Clear</button><button id="back2">⌫ Back</button><button class="sci" onclick="document.getElementById('result2').innerText='DEG mode - sin uses degrees'">DEG</button></div>
+</div>
+
+<!-- CONVERTER -->
+<div class="card hidden" id="page-conv">
+<label>Converter Type</label>
+<select id="convType" onchange="convChange()">
+<option value="length">Length - m, km, cm, inch, ft, mile</option>
+<option value="weight">Weight - kg, g, lb, oz</option>
+<option value="temp">Temperature - °C, °F, K</option>
+<option value="speed">Speed - km/h, m/s, mph</option>
+<option value="area">Area - m², km², acre, hectare</option>
+<option value="volume">Volume - Litre, ml, gallon</option>
+<option value="time">Time - sec, min, hour, day</option>
+<option value="data">Data - MB, GB, TB, KB</option>
+</select>
+<label>Value</label><input id="convVal" type="number" value="1" oninput="doConv()">
+<div class="grid2"><div><label>From</label><select id="convFrom"></select></div><div><label>To</label><select id="convTo"></select></div></div>
+<div class="out" id="convOut">Enter value</div>
+</div>
+
+<!-- MONEY -->
+<div class="card hidden" id="page-money">
+<label>What do you want to calculate?</label>
+<select id="moneyType" onchange="moneyUI()">
+<option value="loan">Loan / Monthly Payment</option>
+<option value="interest">Simple Interest</option>
+<option value="compound">Compound Interest</option>
+<option value="discount">Discount / Sale Price</option>
+<option value="tip">Tip Calculator</option>
+<option value="profit">Profit / Loss %</option>
+<option value="currency">Currency - USD, EUR, GBP, NGN, JPY, INR, GHS, KES</option>
+<option value="crypto">Crypto - BTC, ETH, USDT (approx)</option>
+<option value="salary">Salary - Monthly to Yearly / Daily</option>
+</select>
+<div id="moneyInputs"></div>
+<div class="out" id="moneyOut">Fill the boxes and press Calculate</div>
+<button class="btn" onclick="doMoney()">Calculate Money</button>
+</div>
+
+<!-- HEALTH -->
+<div class="card hidden" id="page-health">
+<label>Health Tool</label>
+<select id="healthType" onchange="healthUI()">
+<option value="bmi">BMI - Body Mass Index</option>
+<option value="bmr">BMR - Calories you burn daily</option>
+<option value="water">Water Intake Needed</option>
+<option value="ideal">Ideal Weight</option>
+<option value="pregnancy">Pregnancy Due Date</option>
+<option value="period">Period / Ovulation</option>
+</select>
+<div id="healthInputs"></div>
+<div class="out" id="healthOut">Fill and calculate</div>
+<button class="btn" onclick="doHealth()">Calculate Health</button>
+</div>
+
+<!-- DATE -->
+<div class="card hidden" id="page-date">
+<label>Date Tool</label>
+<select id="dateType" onchange="dateUI()">
+<option value="age">Age Calculator</option>
+<option value="diff">Days Between Two Dates</option>
+<option value="add">Add Days to Date</option>
+<option value="weekday">What Day Was It?</option>
+<option value="countdown">Countdown to Date</option>
+</select>
+<div id="dateInputs"></div>
+<div class="out" id="dateOut">Choose dates</div>
+<button class="btn" onclick="doDate()">Calculate Date</button>
+</div>
+
+<!-- MATH TOOLS -->
+<div class="card hidden" id="page-math">
+<label>Maths Tool</label>
+<select id="mathType" onchange="mathUI()">
+<option value="quad">Quadratic Equation ax²+bx+c=0</option>
+<option value="percent">Percentage - X% of Y</option>
+<option value="average">Average / Mean</option>
+<option value="gcd">GCD & LCM</option>
+<option value="prime">Prime Checker</option>
+<option value="random">Random Number</option>
+<option value="pythag">Pythagoras - Find Hypotenuse</option>
+<option value="circle">Circle - Area & Circumference</option>
+<option value="triangle">Triangle Area</option>
+<option value="gst">VAT / GST Calculator</option>
+<option value="grade">Grade / Score %</option>
+</select>
+<div id="mathInputs"></div>
+<div class="out" id="mathOut">Enter numbers</div>
+<button class="btn" onclick="doMath()">Calculate</button>
+</div>
+
+<script>
+// TABS
+document.querySelectorAll('.tab').forEach(t=>{
+ t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active')); t.classList.add('active');
+  document.querySelectorAll('.card').forEach(c=>c.classList.add('hidden'));
+  document.getElementById('page-'+t.dataset.t).classList.remove('hidden');
+ });
+});
+
+// BASIC CALC
+var cur='', hist=[];
+var rEl=document.getElementById('result'), hEl=document.getElementById('history');
+function fact(n){if(n<0)return NaN; if(n===0||n===1)return 1; let r=1; for(let i=2;i<=n;i++)r*=i; return r;}
+document.querySelectorAll('[data-val]').forEach(b=>b.addEventListener('click',()=>{cur+=b.dataset.val; rEl.innerText=cur.replace(/\*/g,'×');}));
+document.getElementById('clear').onclick=()=>{cur='';rEl.innerText='0';hEl.innerText=''};
+document.getElementById('back').onclick=()=>{cur=cur.slice(0,-1);rEl.innerText=cur||'0'};
+document.getElementById('equals').onclick=()=>{
+ try{let e=cur.replace(/%/g,'/100'); let a=eval(e); a=Math.round(a*1e9)/1e9; hEl.innerText=cur+' ='; rEl.innerText=a; hist.unshift(cur+' = '+a); document.getElementById('calcHistory').innerText=hist.slice(0,10).join('\n'); cur=String(a);}catch(e){rEl.innerText='Error';}
+};
+
+// SCI CALC
+var cur2='', r2=document.getElementById('result2'), h2=document.getElementById('history2');
+document.querySelectorAll('[data-s]').forEach(b=>b.addEventListener('click',()=>{cur2+=b.dataset.s; r2.innerText=cur2.replace(/\*/g,'×');}));
+document.getElementById('clear2').onclick=()=>{cur2='';r2.innerText='0';h2.innerText=''};
+document.getElementById('back2').onclick=()=>{cur2=cur2.slice(0,-1);r2.innerText=cur2||'0'};
+document.getElementById('equals2').onclick=()=>{
+ try{
+  let e=cur2.replace(/pi/g,'Math.PI').replace(/e(?![a-z])/g,'Math.E').replace(/sin\(/g,'Math.sin(').replace(/cos\(/g,'Math.cos(').replace(/tan\(/g,'Math.tan(').replace(/asin\(/g,'Math.asin(').replace(/acos\(/g,'Math.acos(').replace(/log\(/g,'Math.log10(').replace(/ln\(/g,'Math.log(').replace(/sqrt\(/g,'Math.sqrt(').replace(/cbrt\(/g,'Math.cbrt(').replace(/abs\(/g,'Math.abs(').replace(/%/g,'/100');
+  e=e.replace(/(\d+)!/g,(m,n)=>fact(parseInt(n)));
+  e=e.replace(/Math\.(sin|cos|tan)\(([^)]+)\)/g,(m,f,v)=>'Math.'+f+'(('+v+')*Math.PI/180)');
+  let a=eval(e); a=Math.round(a*1e9)/1e9; h2.innerText=cur2+' ='; r2.innerText=a; cur2=String(a);
+ }catch(e){r2.innerText='Error';}
+};
+
+// CONVERTER
+var convData={
+ length:{units:{m:1,km:1000,cm:0.01,mm:0.001,inch:0.0254,ft:0.3048,mile:1609.34}},
+ weight:{units:{kg:1,g:0.001,lb:0.453592,oz:0.0283495,ton:1000}},
+ temp:{units:{C:1,F:1,K:1}},
+ speed:{units:{'km/h':1,'m/s':3.6,mph:1.60934}},
+ area:{units:{'m2':1,'km2':1000000,acre:4046.86,hectare:10000,'ft2':0.092903}},
+ volume:{units:{Litre:1,ml:0.001,gallon:3.78541,'m3':1000}},
+ time:{units:{sec:1,min:60,hour:3600,day:86400,week:604800}},
+ data:{units:{KB:1,MB:1024,GB:1048576,TB:1073741824}}
+};
+function convChange(){
+ let t=document.getElementById('convType').value;
+ let from=document.getElementById('convFrom'), to=document.getElementById('convTo');
+ from.innerHTML=''; to.innerHTML='';
+ Object.keys(convData[t].units).forEach(u=>{from.innerHTML+='<option>'+u+'</option>'; to.innerHTML+='<option>'+u+'</option>';});
+ to.selectedIndex=1; doConv();
+}
+function doConv(){
+ let t=document.getElementById('convType').value, v=parseFloat(document.getElementById('convVal').value)||0;
+ let f=document.getElementById('convFrom').value, to=document.getElementById('convTo').value, out;
+ if(t==='temp'){
+  let c = f==='C'?v : f==='F'?(v-32)*5/9 : v-273.15;
+  out = to==='C'?c : to==='F'?c*9/5+32 : c+273.15;
+ } else { out = v*convData[t].units[f]/convData[t].units[to]; }
+ document.getElementById('convOut').innerText = v+' '+f+' = '+ (Math.round(out*10000)/10000) +' '+to;
+}
+convChange();
+
+// MONEY
+function inp(label,id,ph){return '<label>'+label+'</label><input id="'+id+'" type="number" placeholder="'+ph+'">'}
+function sel(label,id,opts){return '<label>'+label+'</label><select id="'+id+'">'+opts.map(o=>'<option>'+o+'</option>').join('')+'</select>'}
+function moneyUI(){
+ let t=document.getElementById('moneyType').value, c=document.getElementById('moneyInputs');
+ if(t==='loan') c.innerHTML=inp('Loan Amount','m1','100000')+inp('Interest % per year','m2','10')+inp('Years','m3','2');
+ if(t==='interest') c.innerHTML=inp('Principal','m1','10000')+inp('Rate %','m2','5')+inp('Years','m3','2');
+ if(t==='compound') c.innerHTML=inp('Principal','m1','10000')+inp('Rate %','m2','8')+inp('Years','m3','5');
+ if(t==='discount') c.innerHTML=inp('Original Price','m1','5000')+inp('Discount %','m2','20');
+ if(t==='tip') c.innerHTML=inp('Bill Amount','m1','5000')+inp('Tip %','m2','10')+inp('People','m3','2');
+ if(t==='profit') c.innerHTML=inp('Cost Price','m1','4000')+inp('Selling Price','m2','5500');
+ if(t==='currency') c.innerHTML=inp('Amount','m1','100')+sel('From','m2',['USD','EUR','GBP','NGN','JPY','INR','GHS','KES'])+sel('To','m3',['NGN','USD','EUR','GBP','JPY','INR','GHS','KES']);
+ if(t==='crypto') c.innerHTML=inp('Amount in USD','m1','100')+sel('Crypto','m2',['BTC','ETH','USDT','SOL','DOGE']);
+ if(t==='salary') c.innerHTML=inp('Monthly Salary','m1','150000');
+}
+function doMoney(){
+ let t=document.getElementById('moneyType').value, g=id=>parseFloat(document.getElementById(id).value)||0, out=document.getElementById('moneyOut');
+ if(t==='loan'){let P=g('m1'),r=g('m2')/100/12,n=g('m3')*12; let m=P*r/(1-Math.pow(1+r,-n)); out.innerText='Monthly Payment: '+Math.round(m)+'\nTotal Pay: '+Math.round(m*n)+'\nInterest: '+Math.round(m*n-P);}
+ if(t==='interest'){let i=g('m1')*g('m2')/100*g('m3'); out.innerText='Interest: '+i+'\nTotal: '+(g('m1')+i);}
+ if(t==='compound'){let a=g('m1')*Math.pow(1+g('m2')/100,g('m3')); out.innerText='Final Amount: '+Math.round(a)+'\nProfit: '+Math.round(a-g('m1'));}
+ if(t==='discount'){let d=g('m1')*g('m2')/100; out.innerText='You Save: '+d+'\nYou Pay: '+(g('m1')-d);}
+ if(t==='tip'){let tip=g('m1')*g('m2')/100; out.innerText='Tip: '+tip+'\nTotal: '+(g('m1')+tip)+'\nEach Person Pays: '+((g('m1')+tip)/g('m3')).toFixed(2);}
+ if(t==='profit'){let p=g('m2')-g('m1'); out.innerText='Profit: '+p+'\nProfit %: '+(p/g('m1')*100).toFixed(2)+'%';}
+ if(t==='currency'){let rates={USD:1,EUR:0.92,GBP:0.79,NGN:1550,JPY:151,INR:83,GHS:15.5,KES:131}; let f=document.getElementById('m2').value, to=document.getElementById('m3').value; let usd=g('m1')/rates[f]; out.innerText=g('m1')+' '+f+' = '+(usd*rates[to]).toFixed(2)+' '+to+'\n(Rates are approximate - check live rate)';}
+ if(t==='crypto'){let p={BTC:97000,ETH:3400,USDT:1,SOL:210,DOGE:0.32}; let c=document.getElementById('m2').value; out.innerText=g('m1')+' USD = '+(g('m1')/p[c]).toFixed(6)+' '+c+'\n(Approx price)';}
+ if(t==='salary'){let m=g('m1'); out.innerText='Yearly: '+(m*12)+'\nWeekly: '+(m*12/52).toFixed(0)+'\nDaily: '+(m/30).toFixed(0)+'\nHourly (8hrs): '+(m/30/8).toFixed(0);}
+}
+moneyUI();
+
+// HEALTH
+function healthUI(){
+ let t=document.getElementById('healthType').value, c=document.getElementById('healthInputs');
+ if(t==='bmi') c.innerHTML=inp('Weight (kg)','h1','70')+inp('Height (cm)','h2','170');
+ if(t==='bmr') c.innerHTML=inp('Weight (kg)','h1','70')+inp('Height (cm)','h2','170')+inp('Age','h3','20')+sel('Gender','h4',['Male','Female']);
+ if(t==='water') c.innerHTML=inp('Weight (kg)','h1','70');
+ if(t==='ideal') c.innerHTML=inp('Height (cm)','h1','170')+sel('Gender','h2',['Male','Female']);
+ if(t==='pregnancy') c.innerHTML='<label>First Day of Last Period</label><input id="h1" type="date">';
+ if(t==='period') c.innerHTML='<label>First Day of Last Period</label><input id="h1" type="date">'+inp('Cycle Length (days)','h2','28');
+}
+function doHealth(){
+ let t=document.getElementById('healthType').value, g=id=>parseFloat(document.getElementById(id).value)||0, out=document.getElementById('healthOut');
+ if(t==='bmi'){let bmi=g('h1')/Math.pow(g('h2')/100,2); let cat=bmi<18.5?'Underweight':bmi<25?'Normal ✅':bmi<30?'Overweight':'Obese'; out.innerText='Your BMI: '+bmi.toFixed(1)+'\nCategory: '+cat;}
+ if(t==='bmr'){let bmr=document.getElementById('h4').value==='Male'?10*g('h1')+6.25*g('h2')-5*g('h3')+5:10*g('h1')+6.25*g('h2')-5*g('h3')-161; out.innerText='BMR: '+Math.round(bmr)+' calories/day\nWith light activity: '+Math.round(bmr*1.375)+'\nWith active: '+Math.round(bmr*1.55);}
+ if(t==='water'){out.innerText='You need: '+(g('h1')*0.033).toFixed(1)+' Litres per day\nThat is '+Math.round(g('h1')*0.033*4)+' glasses (250ml)';}
+ if(t==='ideal'){let h=g('h1')/2.54-60; let w=document.getElementById('h2').value==='Male'?50+2.3*h:45.5+2.3*h; out.innerText='Ideal Weight: '+w.toFixed(1)+' kg';}
+ if(t==='pregnancy'){let d=new Date(document.getElementById('h1').value); d.setDate(d.getDate()+280); out.innerText='Due Date: '+d.toDateString();}
+ if(t==='period'){let d=new Date(document.getElementById('h1').value); let ov=new Date(d); ov.setDate(ov.getDate()+g('h2')-14); let next=new Date(d); next.setDate(next.getDate()+g('h2')); out.innerText='Next Period: '+next.toDateString()+'\nOvulation: '+ov.toDateString()+'\nFertile Window: '+(new Date(ov.getTime()-3*86400000)).toDateString()+' to '+(new Date(ov.getTime()+2*86400000)).toDateString();}
+}
+healthUI();
+
+// DATE
+function dateUI(){
+ let t=document.getElementById('dateType').value;
+ let c=document.getElementById('dateInputs');
+ if(t==='age') c.innerHTML='<label>Date of Birth</label><input id="d1" type="date">';
+ if(t==='diff') c.innerHTML='<label>From Date</label><input id="d1" type="date"><label>To Date</label><input id="d2" type="date">';
+ if(t==='add') c.innerHTML='<label>Start Date</label><input id="d1" type="date">'+inp('Add Days','d2','30');
+ if(t==='weekday') c.innerHTML='<label>Pick Date</label><input id="d1" type="date">';
+ if(t==='countdown') c.innerHTML='<label>Target Date</label><input id="d1" type="date">';
+}
+
+function doDate(){
+ let t=document.getElementById('dateType').value;
+ let out=document.getElementById('dateOut');
+
+ if(t==='age'){
+  let b=new Date(document.getElementById('d1').value);
+  let now=new Date();
+  let age=now.getFullYear()-b.getFullYear();
+  let m=now.getMonth()-b.getMonth();
+  if(m<0 || (m===0 && now.getDate()<b.getDate())){ age--; }
+  let days=Math.floor((now-b)/86400000);
+  out.innerText='You are '+age+' years old\n'+days+' days alive\n'+Math.floor(days/30)+' months';
+ }
+
+ if(t==='diff'){
+  let a=new Date(document.getElementById('d1').value);
+  let b=new Date(document.getElementById('d2').value);
+  let diff=Math.abs(b-a)/86400000;
+  out.innerText='Difference: '+diff+' days\n'+(diff/7).toFixed(1)+' weeks\n'+(diff/30).toFixed(1)+' months';
+ }
+
+ if(t==='add'){
+  let d=new Date(document.getElementById('d1').value);
+  let addDays=parseFloat(document.getElementById('d2').value)||0;
+  d.setDate(d.getDate()+addDays);
+  out.innerText='New Date: '+d.toDateString()+'\nDay: '+d.toLocaleDateString('en-US',{weekday:'long'});
+ }
+
+ if(t==='weekday'){
+  let d=new Date(document.getElementById('d1').value);
+  out.innerText=d.toDateString()+' was a '+d.toLocaleDateString('en-US',{weekday:'long'});
+ }
+
+ if(t==='countdown'){
+  let d=new Date(document.getElementById('d1').value);
+  let now=new Date();
+  let diff=Math.ceil((d-now)/86400000);
+  out.innerText=diff+' days remaining\n'+(diff*24)+' hours\n'+(diff*24*60)+' minutes';
+ }
+}
+dateUI();
+
+// MATH TOOLS
+function mathUI(){
+ let t=document.getElementById('mathType').value;
+ let c=document.getElementById('mathInputs');
+ if(t==='quad') c.innerHTML=inp('a','a1','1')+inp('b','a2','-3')+inp('c','a3','2');
+ if(t==='percent') c.innerHTML=inp('What % ?','a1','20')+inp('Of what number?','a2','500');
+ if(t==='average') c.innerHTML='<label>Numbers separated by comma</label><input id="a1" placeholder="10, 20, 30, 40">';
+ if(t==='gcd') c.innerHTML=inp('First Number','a1','12')+inp('Second Number','a2','18');
+ if(t==='prime') c.innerHTML=inp('Number','a1','17');
+ if(t==='random') c.innerHTML=inp('Min','a1','1')+inp('Max','a2','100');
+ if(t==='pythag') c.innerHTML=inp('Side a','a1','3')+inp('Side b','a2','4');
+ if(t==='circle') c.innerHTML=inp('Radius','a1','7');
+ if(t==='triangle') c.innerHTML=inp('Base','a1','10')+inp('Height','a2','5');
+ if(t==='gst') c.innerHTML=inp('Price','a1','1000')+inp('VAT/GST %','a2','7.5');
+ if(t==='grade') c.innerHTML=inp('Your Score','a1','85')+inp('Total Score','a2','100');
+}
+
+function doMath(){
+ let t=document.getElementById('mathType').value;
+ let g=id=>parseFloat(document.getElementById(id).value)||0;
+ let out=document.getElementById('mathOut');
+
+ if(t==='quad'){
+  let a=g('a1'), b=g('a2'), c=g('a3');
+  let disc=b*b-4*a*c;
+  if(disc<0){ out.innerText='No real roots. Discriminant: '+disc; }
+  else{
+   let x1=(-b+Math.sqrt(disc))/(2*a);
+   let x2=(-b-Math.sqrt(disc))/(2*a);
+   out.innerText='x1 = '+x1.toFixed(3)+'\nx2 = '+x2.toFixed(3)+'\nDiscriminant = '+disc;
+  }
+ }
+
+ if(t==='percent'){
+  out.innerText=g('a1')+'% of '+g('a2')+' = '+(g('a1')/100*g('a2'));
+ }
+
+ if(t==='average'){
+  let arr=document.getElementById('a1').value.split(',').map(x=>parseFloat(x)).filter(x=>!isNaN(x));
+  let sum=arr.reduce((a,b)=>a+b,0);
+  out.innerText='Average: '+(sum/arr.length).toFixed(2)+'\nSum: '+sum+'\nCount: '+arr.length+'\nHighest: '+Math.max(...arr)+'\nLowest: '+Math.min(...arr);
+ }
+
+ if(t==='gcd'){
+  let a=g('a1'), b=g('a2');
+  let gcd=(x,y)=>y===0?x:gcd(y,x%y);
+  let gg=gcd(a,b);
+  out.innerText='GCD: '+gg+'\nLCM: '+(a*b/gg);
+ }
+
+ if(t==='prime'){
+  let n=g('a1');
+  let is=true;
+  if(n<2) is=false;
+  for(let i=2;i<=Math.sqrt(n);i++){ if(n%i===0) is=false; }
+  out.innerText=n+(is?' IS a prime ✅':' is NOT prime ❌');
+ }
+
+ if(t==='random'){
+  out.innerText='Random Number: '+Math.floor(Math.random()*(g('a2')-g('a1')+1)+g('a1'));
+ }
+
+ if(t==='pythag'){
+  out.innerText='Hypotenuse c = '+Math.sqrt(g('a1')*g('a1')+g('a2')*g('a2')).toFixed(3);
+ }
+
+ if(t==='circle'){
+  out.innerText='Area: '+(Math.PI*g('a1')*g('a1')).toFixed(2)+'\nCircumference: '+(2*Math.PI*g('a1')).toFixed(2)+'\nDiameter: '+(g('a1')*2);
+ }
+
+ if(t==='triangle'){
+  out.innerText='Area: '+(0.5*g('a1')*g('a2'));
+ }
+
+ if(t==='gst'){
+  let tax=g('a1')*g('a2')/100;
+  out.innerText='VAT: '+tax+'\nTotal with VAT: '+(g('a1')+tax);
+ }
+
+ if(t==='grade'){
+  let p=g('a1')/g('a2')*100;
+  let grade=p>=70?'A':p>=60?'B':p>=50?'C':p>=40?'D':'F';
+  out.innerText='Percentage: '+p.toFixed(1)+'%\nGrade: '+grade;
+ }
+}
+mathUI();
+</script>
+</body>
+</html>
